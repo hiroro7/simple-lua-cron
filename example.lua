@@ -8,7 +8,7 @@ dofile("delayed_cron_monitor.lua")
 --- plz define getticks() as your sysmetm's time function  
 function getticks() return os.time()*1000 end  -- time as ms
 
---- plz use define wait(t) as your sysmetm's wait or sleep function like http://lua-users.org/wiki/SleepFunction
+--- plz define wait(t) as your sysmetm's wait or sleep function like http://lua-users.org/wiki/SleepFunction
 local function wait(t) local start = getticks()  while  getticks() - start < t do end end 
 
 
@@ -36,19 +36,19 @@ task_schedule_table_sample={
       --- iterate flag. without this flag, task executed only onece 
       iterate=true             
 
-      ---delay interval time for  iterate tasks  (ms) 
+    ---delay interval time (ms) for iterate tasks
       ,delays={debugdelay1=10000,debugdelay2=1000} --iterate this task with interval 10s, and  2nd task will exec after 1s of this task exec. You see 2nd task use timer named debugdelay2
 
-      --- only when all conditions are true, task executed
+      --- only when all conditions are true, this task executed
       ,conditions={function(self) return true end , function(self) return getticks() > 0  end   
-		   ,function(self) return getticks()  > self.timers.debugdelay1   end  -- timer status also can be writen in condition section
+		   ,function(self) return getticks()  > self.timers.debugdelay1   end  -- timer status also can write in condition section
 		} 
 
-      ---task body. where self is monitor object(deo0). you can reffer monitor function object information like "self.timers.debugdelay" and so on.
+      ---This is task body. Here "self" is monitor object("deo1" defined later). you can use monitor function object menber like "self.timers.debugdelay".
       ,action=function(self) print("u ",self.timers.debugdelay1,#self.tasks) end 
    }  
    ,
-   --single config table can have defs of many tasks schedules, in oder to use same timer
+   --Single config table can have defs of many tasks (in oder to use same timer).
    {--2nd task of this config table
       iterate=true
       ,delays={debugdelay2=3000} --note timer name is same to 1st task. In this case common timer is used. For example task2-> wait(3000)->task1->wait(1000)->task1 ...  if you want use different timer, you shoud use different timer name 
