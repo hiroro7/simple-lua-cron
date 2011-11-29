@@ -2,6 +2,8 @@ simple-lua-cron is
 cron just loop monitor func. 
 Only use lua basic function.
 
+project home https://github.com/hiroro7/simple-lua-cron/tree/master
+
 License is Affero GPL
 
 You will see some applications of this script in 
