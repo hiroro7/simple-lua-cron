@@ -1,3 +1,6 @@
+simple-lua-cron is cron just loop monitor func. 
+Only use lua basic function.
+
 License is Affero GPL
 
 You will see application of this script in 

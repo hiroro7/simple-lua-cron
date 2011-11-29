@@ -60,8 +60,10 @@ function delayed_cron_monitor.new(...)
 	 =function(self) 
 	     local lasttime = getticks() 
 	     for it, vt in next, self.tasks do 
-		for id, vd in next,vt.delays do 
-		   self.set_timer_when_nil(self,id,lasttime) 
+		if vt.delays ~=nil and type( vt.delays)=="table" then 
+		   for id, vd in next,vt.delays do 
+		      self.set_timer_when_nil(self,id,lasttime) 
+		   end
 		end 
 	     end 
 	  end, 
