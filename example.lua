@@ -13,16 +13,14 @@ local function wait(t) local start = getticks()  while  getticks() - start < t d
 
 
 --like crontab, you should write task schedule config table 
---this config table example print "s ..." and some debug inf with interval 1s=1000ms
-task_schedule_table_simple={
+--this example print "s ..." and some debug inf with interval 1s=1000ms
+task_schedule_table_simple={ --config table
    {iterate=true   
     ,delays={mydelay=1000} 
     ,conditions={} 
     ,action=function(self) print("s ",self.timers.mydelay,#self.tasks) end}
 } 
-
 deo=delayed_cron_monitor.new(task_schedule_table_simple)   --generate monitor function object from config table task_schedule_table_simple
-
 --loop the monitor func deo for 5s. Then scheduled tasks are executed 
 for i=1,5 do 
    deo:refresh() 
@@ -31,15 +29,15 @@ end
 
 
 
----more delatil exmaple 
+---more delatiled example 
 
 task_schedule_table_sample={ 
-   {
+   {--1st task of this config table
       --- iterate flag. without this flag, task executed only onece 
       iterate=true             
 
       ---delay interval time for  iterate tasks  (ms) 
-      ,delays={debugdelay1=1000,debugdelay2=10000} 
+      ,delays={debugdelay1=10000,debugdelay2=1000} --iterate this task with interval 10s, and  2nd task will exec after 1s of this task exec. You see 2nd task use timer named debugdelay2
 
       --- only when all conditions are true, task executed
       ,conditions={function(self) return true end , function(self) return getticks() > 0  end   
@@ -51,9 +49,9 @@ task_schedule_table_sample={
    }  
    ,
    --single config table can have defs of many tasks schedules, in oder to use same timer
-   {
+   {--2nd task of this config table
       iterate=true
-      ,delays={debugdelay1=3000} --note timer name is same to 1st task. In this case common timer is used. For example task2-> wait(3000)->task1->wait(1000)->task1 ...  if you want use different timer, you shoud use different timer name 
+      ,delays={debugdelay2=3000} --note timer name is same to 1st task. In this case common timer is used. For example task2-> wait(3000)->task1->wait(1000)->task1 ...  if you want use different timer, you shoud use different timer name 
       ,conditions={} --blank is same to all all condition true
       ,action=
 	 function(self) 
@@ -62,7 +60,7 @@ task_schedule_table_sample={
 	 end
    } 
    ,
-   {
+   {--3rd task exec only when after 2nd task exec. see variable self.status.some_flag
       iterate=true
       ,conditions={
 	 function (self) return self.status.some_flag end -- This mean : only when self.status.some_flag=true following action executed
@@ -81,7 +79,7 @@ task_schedule_table_sample={
 
 recur_task= 
    { 
-   delays={debug1delay=2000} 
+   delays={debug1delay=1000} 
    ,conditions={} 
    ,action= 
       function(self)  
