@@ -90,7 +90,7 @@ function delayed_cron_monitor.new(...)
 			 self.set_delays(self,vt.delays) 
 		      end 
 		      if not vt.iterate then 
-			 table.remove(self.tasks,it) 
+			 table.remove(self.tasks,it) -- remove without iterate flag
                       end 
 		   end 
 		end 
