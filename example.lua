@@ -6,15 +6,14 @@ dofile("delayed_cron_monitor.lua")
 
 
 --- plz define getticks() as your sysmetm's time function  
---function getticks() return os.clock()*1000000 end 
 function getticks() return os.time()*1000 end  -- time as ms
 
---- plz use your sysmetm's wait or sleep function. 
----ref http://lua-users.org/wiki/SleepFunction
+--- plz use define wait(t) as your sysmetm's wait or sleep function like http://lua-users.org/wiki/SleepFunction
 local function wait(t) local start = getticks()  while  getticks() - start < t do end end 
 
 
---this example print "s ..." and some debug inf with interval 1s=1000ms
+--like crontab, you should write task schedule config table 
+--this config table example print "s ..." and some debug inf with interval 1s=1000ms
 task_schedule_table_simple={
    {iterate=true   
     ,delays={mydelay=1000} 
