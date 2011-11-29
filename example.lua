@@ -21,7 +21,8 @@ task_schedule_table_simple={
     ,action=function(self) print("s ",self.timers.mydelay,#self.tasks) end}
 } 
 
-deo=delayed_cron_monitor.new(task_schedule_table_simple)   --generate monitor function object 
+deo=delayed_cron_monitor.new(task_schedule_table_simple)   --generate monitor function object from config table task_schedule_table_simple
+
 --loop the monitor func deo for 5s. Then scheduled tasks are executed 
 for i=1,5 do 
    deo:refresh() 
