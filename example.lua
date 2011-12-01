@@ -39,7 +39,7 @@ task_schedule_table_sample={
     ---delay interval time (ms) for iterate tasks
       ,delays={cpu1=10000 -- This task occupy resorce named "cpu1" for 10s=10000ms .
 	       ,gpu2=1000 -- This task occupy resorce named "gpu2" for 1s=1000ms .
-      } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after task1 free  the resorce "gpu2") .  You see 2nd task use resorce named "gpu2"
+      } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after task1 free the resorce "gpu2") . You will see 2nd task use "gpu2" later.
 
       --- only when all conditions are true, this task executed
       ,conditions={function(self) return true end , function(self) return getticks() > 0  end   
@@ -53,8 +53,8 @@ task_schedule_table_sample={
    --Single config table can have defs of many tasks (in oder to use same timer).
    {--2nd task of this config table
       iterate=true
-    ,delays={gpu2=3000} --Note same resorce "gpu2" is used in 1st task. In this case, this task is executed after task1 free resorce "gpu2". For example "gpu2" is used by task2-> wait(3000)->task1->wait(1000)->task2 -> wait(3000) -> task2 ...  
-      ,conditions={} --blank is same to all all condition true
+    ,delays={gpu2=3000} --Note same resorce "gpu2" is used in 1st task. In this case, this task is executed after task1 free resorce "gpu2". "gpu2" will be used by task2-> wait(3000)->task1->wait(1000)->task2 -> wait(3000) -> task2 ...  
+      ,conditions={} --blank is same to all condition true
       ,action=
 	 function(self) 
 	    print("v ",self.timers.gpu2,#self.tasks) 
