@@ -1,6 +1,6 @@
 This is cron just loop monitor function. 
 Only use lua basic function.
-Scheduled tasked are axecuted based on resorce ocuupy time.
+Scheduled tasks are axecuted based on resorce ocuupy time.
 If you want just iterate tasks without resorce time assignment , "cron.lua" is better.
 
 project home https://github.com/hiroro7/simple-lua-cron/tree/master
