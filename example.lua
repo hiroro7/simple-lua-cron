@@ -36,7 +36,7 @@ task_schedule_table_sample={
       --- set iterate flag. Without this flag, task executed only onece 
       iterate=true             
 
-    ---delay interval time (ms) for iterate tasks
+    ---Resorce occupy time ( interval time (ms) for iterate) 
       ,delays={cpu1=10000 -- This task occupy resorce named "cpu1" for 10s=10000ms .
 	       ,gpu2=1000 -- This task occupy resorce named "gpu2" for 1s=1000ms .
       } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after task1 free the resorce "gpu2") . You will see 2nd task use "gpu2" later.
