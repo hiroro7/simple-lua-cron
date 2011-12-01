@@ -12,8 +12,8 @@ function getticks() return os.time()*1000 end  -- time as ms
 local function wait(t) local start = getticks()  while  getticks() - start < t do end end 
 
 
---Like crontab, you should write task schedule config table 
---this example print "s " (and some debug inf ) with interval 1s=1000ms
+--Like crontab, you should write task schedule config table. 
+--This example print "s " (and some debug inf ) with interval 1s=1000ms
 task_schedule_table_simple={ --config table
    {iterate=true   
     ,delays={mydelay=1000} 
@@ -21,7 +21,7 @@ task_schedule_table_simple={ --config table
     ,action=function(self) print("s ",self.timers.mydelay,#self.tasks) end}
 } 
 deo=delayed_cron_monitor.new(task_schedule_table_simple)   --generate monitor function object from config table "task_schedule_table_simple"
---loop the monitor func deo for 5s. Then scheduled tasks are executed 
+--loop the monitor function deo for 5s. Then scheduled tasks are executed 
 for i=1,5 do 
    deo:refresh() 
    wait(1000) 
@@ -39,7 +39,7 @@ task_schedule_table_sample={
     ---delay interval time (ms) for iterate tasks
       ,delays={cpu1=10000 -- This task occupy resorce named "cpu1" for 10s=10000ms .
 	       ,gpu2=1000 -- This task occupy resorce named "gpu2" for 1s=1000ms .
-      } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after the resorce "gpu2" is free) .  You see 2nd task use resorce named "gpu2"
+      } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after task1 free  the resorce "gpu2") .  You see 2nd task use resorce named "gpu2"
 
       --- only when all conditions are true, this task executed
       ,conditions={function(self) return true end , function(self) return getticks() > 0  end   
