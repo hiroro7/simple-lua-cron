@@ -17,7 +17,23 @@ function even(a) return a % 2 == 0 end
 
 --for debug print 
 function printup(obj) print(unpack(obj)) end
+function print_table_deep(obj) 
+   if type(obj)=="table" then 
+      for i, v in next,obj do 
+	 if type(v)=="table" then
+	    print(i)
+	    print_table_deep(v) 
+	 else
+	    print(i,v) 
+	 end
+      end
+   end
+end
+-- usage
 --printup({1,2,3})
+-- print(type({1,2}) )
+-- t={a=1,b=2,c={x=10,y=20}}
+-- print_table_deep(t)
 
 
 function compose(f, g) return function(...) return f(g(...)) end end
@@ -77,6 +93,7 @@ end
 -- => 1, 4, 9, 16, 25
 
 
+
 function mapn(func, ...)
   local new_array = {}
   local i=1
@@ -128,6 +145,24 @@ end
 -- print(#t)
 -- printup(t)
 
+--from http://stackoverflow.com/questions/1410862/concatenation-of-tables-in-lua 
+function array_concat(...)  
+   local t = {} 
+   for n = 1,select("#",...) do 
+      local arg = select(n,...) 
+      if type(arg)=="table" then 
+	 for _,v in ipairs(arg) do
+         --for i, v in next,array do 
+	    t[#t+1] = v 
+	 end 
+      else 
+	 t[#t+1] = arg 
+      end 
+   end 
+   return t 
+end 
+--printup(array_concat({1,2},{10,20}))
+
 
 
 
@@ -157,3 +192,59 @@ function deepcopy(object)
     end
     return _copy(object)
 end
+
+
+
+--hiroro7 add 
+
+function alist_concat(...)  
+   local t = {} 
+   for n = 1,select("#",...) do 
+      local arg = select(n,...) 
+      if type(arg)=="table" then 
+         for i, v in next,arg do 
+	    t[i] = v 
+	 end 
+      else 
+	 t[#t+1] = arg 
+      end 
+   end 
+   return t 
+end 
+--tmp=alist_concat({a=1,b=2},{x=10,y=20})
+--print(tmp.a,tmp.x)
+
+function alist_strict_concat(...)  
+   local t = {} 
+   for n = 1,select("#",...) do 
+      local arg = select(n,...) 
+      if type(arg)=="table" then 
+         for i, v in next,arg do
+            if t[i] == nil then 
+	       t[i] = v 
+            else
+               t[#t+1] = v 
+            end
+	 end 
+      else 
+	 t[#t+1] = arg 
+      end 
+   end 
+   return t 
+end 
+--tmp=alist_strict_concat({a=1,b=2},{a=15,x=10,y=20})
+--for i, v in next,tmp do print(i,v) end 
+
+
+function map_alist(func, array)
+  local new_array = {} ,j,w
+  for i, v in next,array do
+      j,w= func(i,v)
+      --print(j,w)
+    new_array[j] = w
+  end
+  return new_array
+end
+--l={a=10,b=20}
+--ll=map_key_value(function(i,v) print(i,v) return i .. "_x" , v*v end  , l)
+--print(ll["a_x"])

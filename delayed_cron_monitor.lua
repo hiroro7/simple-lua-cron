@@ -1,11 +1,14 @@
---from http://stackoverflow.com/questions/1410862/concatenation-of-tables-in-lua 
-function array_concat(...)  
+local function alist_strict_concat(...)  
    local t = {} 
    for n = 1,select("#",...) do 
       local arg = select(n,...) 
       if type(arg)=="table" then 
-	 for _,v in ipairs(arg) do 
-	    t[#t+1] = v 
+         for i, v in next,arg do
+            if t[i] == nil then 
+	       t[i] = v 
+            else
+               t[#t+1] = v 
+            end
 	 end 
       else 
 	 t[#t+1] = arg 
@@ -13,8 +16,9 @@ function array_concat(...)
    end 
    return t 
 end 
-
-
+--Usage
+--tmp=alist_strict_concat({a=1,b=2},{a=15,x=10,y=20})
+--for i, v in next,tmp do print(i,v) end 
 
 ---License is Affero GPL
 --- class name mybe change to more valid name
@@ -74,7 +78,7 @@ function delayed_cron_monitor.new(...)
 	  end, 
       append_tasks 
 	 =function(self,tasks) 
-	     self.tasks=array_concat(self.tasks, tasks) 
+	     self.tasks=alist_strict_concat(self.tasks, tasks) 
 	     self.init_timers(self) 
 	  end 
       ,refresh 

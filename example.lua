@@ -39,25 +39,25 @@ task_schedule_table_sample={
     ---Resorce occupy time ( interval time (ms) for iterate) 
       ,delays={cpu1=10000 -- This task occupy resorce named "cpu1" for 10s=10000ms .
 	       ,gpu2=1000 -- This task occupy resorce named "gpu2" for 1s=1000ms .
-      } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after task1 free the resorce "gpu2") . You will see 2nd task use "gpu2" later.
+      } --this task is iterated with interval 10s. Also resorce "gpu2" is used for 1s.  2nd task will be executed after 1s of this task (after task1 free the resorce "gpu2") . Bcause 2nd task uses "gpu2".
 
-      --- only when all conditions are true, this task executed
+      --- only when all these start conditions are true, this task start
       ,conditions={function(self) return true end , function(self) return getticks() > 0  end   
-		   ,function(self) return getticks()  > self.timers.cpu1   end  -- timer status (resorce ocuppeid time contision) also can write in condition section
+		   ,function(self) return getticks()  >= self.timers.cpu1   end  -- Timer status (resorce ocuppeid time contision) also can write in condition section no only delays section.
 		} 
 
       ---This is task body. Here "self" is monitor object("deo1" defined later). you can use the object's menber like "self.timers.cpu1".
-      ,action=function(self) print("u ",self.timers.cpu1,#self.tasks) end 
+      ,action=function(self) print("1 ",self.timers.cpu1,#self.tasks) end 
    }  
    ,
    --Single config table can have defs of many tasks (in oder to use same timer).
    {--2nd task of this config table
       iterate=true
-    ,delays={gpu2=3000} --Note same resorce "gpu2" is used in 1st task. In this case, this task is executed after task1 free resorce "gpu2". "gpu2" will be used by task2-> wait(3000)->task1->wait(1000)->task2 -> wait(3000) -> task2 ...  
+    ,delays={gpu2=3000} --Note resorce "gpu2" also is used in 1st task. In this case, this task is executed after task1 free resorce "gpu2". "gpu2" will be used by task1 -> wait(1000) -> task2-> wait(3000)-> task2 -> wait(3000) -> task2 ...  
       ,conditions={} --blank is same to all condition true
       ,action=
 	 function(self) 
-	    print("v ",self.timers.gpu2,#self.tasks) 
+	    print("2 ",self.timers.gpu2,#self.tasks) 
 	    self.status.some_flag=true  --if you want use some flag or parameter, that should write inside status menber of monitor_object (=self.status)
 	 end
    } 
@@ -69,7 +69,7 @@ task_schedule_table_sample={
       },
       action=
 	 function(self) 
-	    print("w ",self.timers.gpu2,#self.tasks) 
+	    print("3 ",self.timers.gpu2,#self.tasks) 
 	    self.status.some_flag=false --reset flag 
 	 end
    }  
